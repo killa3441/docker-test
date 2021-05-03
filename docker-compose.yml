@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile-apache
+    volumes:
+      - .:/var/www/html
+    ports:
+      - 8000:80
+    environment:
+      TZ: "Asia/Tokyo"
+    depends_on:
+      - db
+
+  db:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile-MySQL
+    volumes:
+      - db-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: blog_tutorial
+      MYSQL_ROOT_PASSWORD: root_password
+      TZ: "Asia/Tokyo"
+
+volumes:
+  db-data:
+    external: false
